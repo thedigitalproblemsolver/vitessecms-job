@@ -13,7 +13,9 @@ class AdminMenuListener
     {
         if ($adminMenu->getUser()->getPermissionRole() === 'superadmin') :
             $children = new AdminMenuNavBarChildren();
-            $children->addChild('Activity log', 'admin/log/adminlog/adminList');
+            $children->addChild('Job-queue', 'admin/job/adminjobqueue/adminList')
+                ->addChild('Execute job', 'job/JobQueue/execute','_blank')
+            ;
             $adminMenu->addDropdown('System',$children);
         endif;
     }
