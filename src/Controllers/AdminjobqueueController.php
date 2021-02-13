@@ -16,5 +16,6 @@ class AdminjobqueueController extends AbstractAdminController
         $this->classForm = JobQueueForm::class;
         $this->listOrder = 'createdAt';
         $this->listOrderDirection = -1;
+        $this->displayEditButton = false;
     }
 }
