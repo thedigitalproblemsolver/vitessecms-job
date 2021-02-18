@@ -10,6 +10,6 @@ class InitiateAdminListeners
     public static function setListeners(Manager $eventsManager): void
     {
         $eventsManager->attach('adminMenu', new AdminMenuListener());
-        $eventsManager->attach(AdminjobqueueController::class,new AdminjobqueueControllerListener());
+        $eventsManager->attach(AdminjobqueueController::class, new AdminjobqueueControllerListener());
     }
 }

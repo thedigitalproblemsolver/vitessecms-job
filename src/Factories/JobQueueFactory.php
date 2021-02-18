@@ -13,10 +13,11 @@ class JobQueueFactory
         string $message = '',
         bool $published = true,
         ?int $delay = null
-    ): JobQueue {
+    ): JobQueue
+    {
         $datetime = new \DateTime();
-        if($delay) :
-            $datetime->modify('+'.$delay.' seconds');
+        if ($delay) :
+            $datetime->modify('+' . $delay . ' seconds');
         endif;
 
         return (new JobQueue())
@@ -25,7 +26,6 @@ class JobQueueFactory
             ->setMessage($message)
             ->setParseDate($datetime->format('Y-m-d H:i:s'))
             ->setPublished($published)
-            ->setName($name)
-        ;
+            ->setName($name);
     }
 }

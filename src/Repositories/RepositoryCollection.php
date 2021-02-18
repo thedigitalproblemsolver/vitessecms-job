@@ -20,7 +20,8 @@ class RepositoryCollection implements BaseRepositoriesInterface
     public function __construct(
         JobQueueRepository $jobQueueRepository,
         UserRepository $userRepository
-    ) {
+    )
+    {
         $this->jobqueue = $jobQueueRepository;
         $this->user = $userRepository;
     }
