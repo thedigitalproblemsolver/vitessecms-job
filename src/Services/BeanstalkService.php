@@ -2,13 +2,13 @@
 
 namespace VitesseCms\Job\Services;
 
-use VitesseCms\Core\AbstractController;
-use VitesseCms\Job\Factories\JobQueueFactory;
-use VitesseCms\User\Models\User;
 use Phalcon\Http\RequestInterface;
 use Phalcon\Mvc\User\Component;
 use Phalcon\Queue\Beanstalk;
 use Phalcon\Queue\Beanstalk\Job;
+use VitesseCms\Core\AbstractController;
+use VitesseCms\Job\Factories\JobQueueFactory;
+use VitesseCms\User\Models\User;
 
 class BeanstalkService extends Beanstalk
 {

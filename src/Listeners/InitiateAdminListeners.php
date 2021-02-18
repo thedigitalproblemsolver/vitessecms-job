@@ -3,7 +3,6 @@
 namespace VitesseCms\Job\Listeners;
 
 use Phalcon\Events\Manager;
-use VitesseCms\Datagroup\Listeners\AdmindatagroupControllerListener;
 use VitesseCms\Job\Controllers\AdminjobqueueController;
 
 class InitiateAdminListeners

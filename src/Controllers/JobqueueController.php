@@ -2,13 +2,13 @@
 
 namespace VitesseCms\Job\Controllers;
 
+use DateTime;
+use Phalcon\Exception;
 use VitesseCms\Core\AbstractController;
 use VitesseCms\Core\AbstractModule;
-use VitesseCms\Job\Services\BeanstalkService;
 use VitesseCms\Database\Utils\MongoUtil;
 use VitesseCms\Job\Repositories\RepositoriesInterface;
-use Phalcon\Exception;
-use \DateTime;
+use VitesseCms\Job\Services\BeanstalkService;
 
 class JobqueueController extends AbstractController implements RepositoriesInterface
 {

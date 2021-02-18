@@ -2,10 +2,9 @@
 
 namespace VitesseCms\Job\Listeners;
 
+use Phalcon\Events\Event;
 use VitesseCms\Admin\Models\AdminMenu;
 use VitesseCms\Admin\Models\AdminMenuNavBarChildren;
-use VitesseCms\Datagroup\Models\Datagroup;
-use Phalcon\Events\Event;
 
 class AdminMenuListener
 {
