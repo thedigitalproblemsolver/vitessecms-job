@@ -2,13 +2,13 @@
 
 namespace VitesseCms\Job\Controllers;
 
+use DateTime;
+use Phalcon\Exception;
 use VitesseCms\Core\AbstractController;
 use VitesseCms\Core\AbstractModule;
-use VitesseCms\Job\Services\BeanstalkService;
 use VitesseCms\Database\Utils\MongoUtil;
 use VitesseCms\Job\Repositories\RepositoriesInterface;
-use Phalcon\Exception;
-use \DateTime;
+use VitesseCms\Job\Services\BeanstalkService;
 
 class JobqueueController extends AbstractController implements RepositoriesInterface
 {
@@ -22,12 +22,12 @@ class JobqueueController extends AbstractController implements RepositoriesInter
     public function parseJobs(BeanstalkService $beanstalkService): void
     {
         $job = $beanstalkService->peekReady();
-        if($job !== null):
+        if ($job !== null):
             try {
                 $task = $job->getBody();
                 $_POST = $task['post'];
                 $_REQUEST = $_POST;
-                if(isset($task['eventInputs'])) :
+                if (isset($task['eventInputs'])) :
                     $this->content->setEventInputs($task['eventInputs']);
                 endif;
 
@@ -52,8 +52,8 @@ class JobqueueController extends AbstractController implements RepositoriesInter
                         'Communicationcommunication',
                         'Communication',
                         ucfirst($task['module'])
-                    ) .'\\Module';
-                if(class_exists($moduleNamespace)) :
+                    ) . '\\Module';
+                if (class_exists($moduleNamespace)) :
                     /** @var AbstractModule $module */
                     $module = new $moduleNamespace();
                     $controller->repositories = $module->getRepositories();
@@ -69,9 +69,8 @@ class JobqueueController extends AbstractController implements RepositoriesInter
                     $jobQueue->set('published', true)
                         ->set('parsed', (new DateTime())->format('Y-m-d H:i:s'))
                         ->set('message', trim(strip_tags($message)))
-                        ->save()
-                    ;
-                    echo 'Job with id <a href="'.$this->url->getBaseUri().'admin/core/adminjobqueue/edit/'.$jobQueue->getId().'" target="_blank ">'.$jobQueue->getId().'</a> is executed.';
+                        ->save();
+                    echo 'Job with id <a href="' . $this->url->getBaseUri() . 'admin/core/adminjobqueue/edit/' . $jobQueue->getId() . '" target="_blank ">' . $jobQueue->getId() . '</a> is executed.';
                 endif;
                 $job->delete();
             } catch (Exception $exception) {

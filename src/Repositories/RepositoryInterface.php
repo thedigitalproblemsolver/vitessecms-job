@@ -2,7 +2,6 @@
 
 namespace VitesseCms\Job\Repositories;
 
-use VitesseCms\Datafield\Repositories\DatafieldRepository;
 use VitesseCms\User\Repositories\UserRepository;
 
 /**

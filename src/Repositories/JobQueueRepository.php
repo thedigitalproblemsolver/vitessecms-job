@@ -12,7 +12,7 @@ class JobQueueRepository
         JobQueue::setFindPublished(false);
         /** @var JobQueue $jobQueue */
         $jobQueue = JobQueue::findFirst();
-        if(is_object($jobQueue)):
+        if (is_object($jobQueue)):
             return $jobQueue;
         endif;
 

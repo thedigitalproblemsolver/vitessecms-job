@@ -2,13 +2,13 @@
 
 namespace VitesseCms\Job\Services;
 
-use VitesseCms\Core\AbstractController;
-use VitesseCms\Job\Factories\JobQueueFactory;
-use VitesseCms\User\Models\User;
 use Phalcon\Http\RequestInterface;
 use Phalcon\Mvc\User\Component;
 use Phalcon\Queue\Beanstalk;
 use Phalcon\Queue\Beanstalk\Job;
+use VitesseCms\Core\AbstractController;
+use VitesseCms\Job\Factories\JobQueueFactory;
+use VitesseCms\User\Models\User;
 
 class BeanstalkService extends Beanstalk
 {
@@ -26,18 +26,19 @@ class BeanstalkService extends Beanstalk
         RequestInterface $request,
         ?User $user = null,
         array $jobOptions = []
-    ): int {
+    ): int
+    {
         $userId = null;
         if ($user) :
             $userId = $user->getId();
         endif;
         $data = [
-            'module'      => $router->getModuleName(),
-            'controller'  => $router->getControllerName(),
-            'action'      => $router->getActionName(),
-            'params'      => $router->getParams(),
-            'userId'      => $userId,
-            'post'        => $request->getPost(),
+            'module' => $router->getModuleName(),
+            'controller' => $router->getControllerName(),
+            'action' => $router->getActionName(),
+            'params' => $router->getParams(),
+            'userId' => $userId,
+            'post' => $request->getPost(),
             'eventInputs' => (new Component())->content->getEventInputs(),
         ];
         $delay = $jobOptions['delay'] ?? null;
@@ -45,9 +46,9 @@ class BeanstalkService extends Beanstalk
         $jobId = $this->put($data, $jobOptions);
 
         JobQueueFactory::create(
-            $router->getModuleName().
-            '/'.$router->getControllerName().
-            '/'.$router->getActionName(),
+            $router->getModuleName() .
+            '/' . $router->getControllerName() .
+            '/' . $router->getActionName(),
             serialize($router->getParams()),
             $jobId,
             '',
