@@ -18,10 +18,10 @@
     }
   },
   "require": {
-    "vitessecms/database": "~0.0.3",
-    "vitessecms/admin": "~0.0.21",
+    "vitessecms/database": "~0.0.4",
+    "vitessecms/admin": "~0.0.22",
     "vitessecms/core": "~0.0.7",
-    "vitessecms/user": "~0.0.6",
-    "vitessecms/form": "~0.0.9"
+    "vitessecms/user": "~0.0.7",
+    "vitessecms/form": "~0.0.10"
   }
 }
