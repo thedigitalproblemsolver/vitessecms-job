@@ -2,6 +2,7 @@
 
 namespace VitesseCms\Job\Factories;
 
+use DateTime;
 use VitesseCms\Job\Models\JobQueue;
 
 class JobQueueFactory
@@ -15,7 +16,7 @@ class JobQueueFactory
         ?int $delay = null
     ): JobQueue
     {
-        $datetime = new \DateTime();
+        $datetime = new DateTime();
         if ($delay) :
             $datetime->modify('+' . $delay . ' seconds');
         endif;
