@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace VitesseCms\Job\Listeners;
+namespace VitesseCms\Job\Listeners\Controllers;
 
 use Phalcon\Events\Event;
 use VitesseCms\Admin\AbstractAdminController;
@@ -8,11 +8,7 @@ use VitesseCms\Admin\Forms\AdminlistFormInterface;
 
 class AdminjobqueueControllerListener
 {
-    public function adminListFilter(
-        Event $event,
-        AbstractAdminController $controller,
-        AdminlistFormInterface $form
-    ): string
+    public function adminListFilter(Event $event, AbstractAdminController $controller, AdminlistFormInterface $form): string
     {
         $form->addNameField($form);
         $form->addPublishedField($form);
