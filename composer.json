@@ -20,7 +20,7 @@
   "require": {
     "vitessecms/database": "~0.2.2",
     "vitessecms/admin": "~0.2.4",
-    "vitessecms/core": "~0.2.6",
+    "vitessecms/core": "~0.2.7",
     "vitessecms/user": "~0.2.3",
     "vitessecms/form": "~0.2.5"
   }
