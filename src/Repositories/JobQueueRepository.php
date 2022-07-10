@@ -9,6 +9,7 @@ class JobQueueRepository
     public function getFirstByJobId(int $jobId): ?JobQueue
     {
         JobQueue::setFindValue('jobId', $jobId);
+        JobQueue::setFindValue('published', false);
         JobQueue::setFindPublished(false);
         /** @var JobQueue $jobQueue */
         $jobQueue = JobQueue::findFirst();

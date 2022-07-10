@@ -38,6 +38,11 @@ class JobQueue extends AbstractCollection
         return $this;
     }
 
+    public function getParams(): string
+    {
+        return $this->params;
+    }
+
     public function setJobId(int $jobId): JobQueue
     {
         $this->jobId = $jobId;
