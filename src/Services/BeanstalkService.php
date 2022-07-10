@@ -7,6 +7,7 @@ use Phalcon\Mvc\User\Component;
 use Phalcon\Queue\Beanstalk;
 use Phalcon\Queue\Beanstalk\Job;
 use VitesseCms\Core\AbstractController;
+use VitesseCms\Job\Enum\JobTypeEnum;
 use VitesseCms\Job\Factories\JobQueueFactory;
 use VitesseCms\User\Models\User;
 
@@ -22,10 +23,10 @@ class BeanstalkService extends Beanstalk
     }
 
     public function create(
-        RouterService $router,
+        RouterService    $router,
         RequestInterface $request,
-        ?User $user = null,
-        array $jobOptions = []
+        ?User            $user = null,
+        array            $jobOptions = []
     ): int
     {
         $userId = null;
@@ -33,6 +34,7 @@ class BeanstalkService extends Beanstalk
             $userId = $user->getId();
         endif;
         $data = [
+            'jobType' => JobTypeEnum::CONTROLLER,
             'module' => $router->getModuleName(),
             'controller' => $router->getControllerName(),
             'action' => $router->getActionName(),
@@ -54,6 +56,30 @@ class BeanstalkService extends Beanstalk
             '',
             false,
             $delay
+        )->save();
+
+        return $jobId;
+    }
+
+    public function createListenerJob(
+        string $name,
+        string $eventTrigger,
+               $eventVehicle,
+        array  $jobOptions = []
+    ): int
+    {
+        $jobId = $this->put([
+            'jobType' => JobTypeEnum::LISTENER,
+            'eventTrigger' => $eventTrigger
+        ], $jobOptions);
+
+        JobQueueFactory::create(
+            $name,
+            serialize($eventVehicle),
+            $jobId,
+            '',
+            false,
+            $jobOptions['delay'] ?? null
         )->save();
 
         return $jobId;
