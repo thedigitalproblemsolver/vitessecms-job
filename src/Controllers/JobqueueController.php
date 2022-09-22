@@ -29,9 +29,14 @@ class JobqueueController extends AbstractController implements RepositoriesInter
                 $task = $job->getBody();
                 if ($task['jobType'] === JobTypeEnum::LISTENER) :
                     $jobQueue = $this->repositories->jobqueue->getFirstByJobId((int)$job->getId());
-                    $eventVehicle = unserialize($jobQueue->getParams());
-                    $this->eventsManager->fire($task['eventTrigger'], $eventVehicle);
-                    $this->setJobFinished($jobQueue, $job, 'Event ' . $task['eventTrigger'] . ' has run');
+                    if($jobQueue !== null) :
+                        $eventVehicle = unserialize($jobQueue->getParams());
+                        $this->eventsManager->fire($task['eventTrigger'], $eventVehicle);
+                        $this->setJobFinished($jobQueue, $job, 'Event ' . $task['eventTrigger'] . ' has run');
+                    else :
+                        $job->delete();
+                        $this->log->message('Beanstalk job with ID is '.$job->getId().' deleted');
+                    endif;
                 else :
                     $_POST = $task['post'];
                     $_REQUEST = $_POST;
@@ -78,16 +83,11 @@ class JobqueueController extends AbstractController implements RepositoriesInter
             } catch (Exception $exception) {
                 $jobQueue = $this->repositories->jobqueue->getFirstByJobId((int)$job->getId());
                 if ($jobQueue) :
-                    $jobQueue->set('message', 'task burried')->save();
+                    $jobQueue->set('message', 'task deleted')->save();
                 endif;
 
-                $this->mailer->sendMail(
-                    'info@craftbeermerchandise.com',
-                    'JobQueue failed',
-                    $exception->getMessage()
-                );
-                $job->bury();
-
+                $job->delete();
+                $this->log->message('Beanstalk job with ID is '.$job->getId().' deleted');
             }
         endif;
 
