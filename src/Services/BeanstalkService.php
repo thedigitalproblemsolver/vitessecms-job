@@ -11,7 +11,8 @@ use VitesseCms\Job\Enum\JobTypeEnum;
 use VitesseCms\Job\Factories\JobQueueFactory;
 use VitesseCms\User\Models\User;
 
-class BeanstalkService extends Beanstalk
+//    https://github.com/xobotyi/beansclient
+class BeanstalkService
 {
     public function createByController(AbstractController $controller): int
     {
