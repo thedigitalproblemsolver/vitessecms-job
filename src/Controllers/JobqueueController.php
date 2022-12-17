@@ -24,6 +24,8 @@ class JobqueueController extends AbstractController implements RepositoriesInter
     public function parseJobs(BeanstalkService $beanstalkService): void
     {
         $job = $beanstalkService->peekReady();
+        var_dump($job);
+        die();
         if ($job !== null):
             try {
                 $task = $job->getBody();

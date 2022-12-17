@@ -10,10 +10,20 @@ use VitesseCms\Core\AbstractController;
 use VitesseCms\Job\Enum\JobTypeEnum;
 use VitesseCms\Job\Factories\JobQueueFactory;
 use VitesseCms\User\Models\User;
+use xobotyi\beansclient\BeansClient;
 
-//    https://github.com/xobotyi/beansclient
 class BeanstalkService
 {
+    /**
+     * @var BeansClient
+     */
+    private $client;
+
+    public function __construct(BeansClient $client)
+    {
+        $this->client = $client;
+    }
+
     public function createByController(AbstractController $controller): int
     {
         $router = $controller->router;
