@@ -24,19 +24,19 @@ class JobqueueController extends AbstractController implements RepositoriesInter
     public function parseJobs(BeanstalkService $beanstalkService): void
     {
         $job = $beanstalkService->peekReady();
-        var_dump($job);
-        die();
         if ($job !== null):
+            $this->di->setShared('collectionManager', $this->di->get('collectionsManager'));
             try {
-                $task = $job->getBody();
+                $task = unserialize($job->getData());
                 if ($task['jobType'] === JobTypeEnum::LISTENER) :
                     $jobQueue = $this->repositories->jobqueue->getFirstByJobId((int)$job->getId());
                     if($jobQueue !== null) :
                         $eventVehicle = unserialize($jobQueue->getParams());
                         $this->eventsManager->fire($task['eventTrigger'], $eventVehicle);
                         $this->setJobFinished($jobQueue, $job, 'Event ' . $task['eventTrigger'] . ' has run');
+                        $beanstalkService->delete($job);
                     else :
-                        $job->delete();
+                        $beanstalkService->delete($job);
                         $this->log->message('Beanstalk job with ID is '.$job->getId().' deleted');
                     endif;
                 else :
@@ -81,6 +81,7 @@ class JobqueueController extends AbstractController implements RepositoriesInter
 
                     $jobQueue = $this->repositories->jobqueue->getFirstByJobId((int)$job->getId());
                     $this->setJobFinished($jobQueue, $job, 'Event ' . $task['eventTrigger'] . ' has run');
+                    $beanstalkService->delete($job);
                 endif;
             } catch (Exception $exception) {
                 $jobQueue = $this->repositories->jobqueue->getFirstByJobId((int)$job->getId());
@@ -88,7 +89,7 @@ class JobqueueController extends AbstractController implements RepositoriesInter
                     $jobQueue->set('message', 'task deleted')->save();
                 endif;
 
-                $job->delete();
+                $beanstalkService->delete($job);
                 $this->log->message('Beanstalk job with ID is '.$job->getId().' deleted');
             }
         endif;
@@ -105,6 +106,5 @@ class JobqueueController extends AbstractController implements RepositoriesInter
             ->set('message', trim(strip_tags($message)))
             ->save();
         echo 'Job with id <a href="' . $this->url->getBaseUri() . 'admin/core/adminjobqueue/edit/' . $jobQueue->getId() . '" target="_blank ">' . $jobQueue->getId() . '</a> is executed.';
-        $job->delete();
     }
 }

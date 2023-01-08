@@ -23,6 +23,6 @@
     "vitessecms/core": "~0.2.24",
     "vitessecms/user": "~0.2.10",
     "vitessecms/form": "~0.2.10",
-    "xobotyi/beansclient": "^1.0"
+    "pda/pheanstalk": "^4.0"
   }
 }
