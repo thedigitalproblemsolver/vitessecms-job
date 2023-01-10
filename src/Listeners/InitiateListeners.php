@@ -5,11 +5,11 @@ namespace VitesseCms\Job\Listeners;
 use VitesseCms\Core\Interfaces\InjectableInterface;
 use VitesseCms\Job\Listeners\Admin\AdminMenuListener;
 
-class InitiateListeners implements InjectableInterface
+class InitiateListeners
 {
     public static function setListeners(InjectableInterface $di): void
     {
-        if($di->user->hasAdminAccess()):
+        if ($di->user->hasAdminAccess()):
             $di->eventsManager->attach('adminMenu', new AdminMenuListener());
         endif;
     }

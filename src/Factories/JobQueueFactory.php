@@ -13,11 +13,11 @@ class JobQueueFactory
         int $jobId,
         string $message = '',
         bool $published = true,
-        ?int $delay = null
+        int $delay = 0
     ): JobQueue
     {
         $datetime = new DateTime();
-        if ($delay) :
+        if ($delay > 0) :
             $datetime->modify('+' . $delay . ' seconds');
         endif;
 
