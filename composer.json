@@ -18,11 +18,11 @@
     }
   },
   "require": {
-    "vitessecms/database": "~0.2.6",
-    "vitessecms/admin": "~0.2.9",
+    "vitessecms/database": "~0.3.0",
+    "vitessecms/admin": "~0.3.0",
     "vitessecms/core": "~0.2.24",
     "vitessecms/user": "~0.2.10",
-    "vitessecms/form": "~0.2.10",
+    "vitessecms/form": "~0.3.0",
     "pda/pheanstalk": "^4.0"
   }
 }
