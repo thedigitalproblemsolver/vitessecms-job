@@ -4,15 +4,27 @@ namespace VitesseCms\Job\Services;
 
 use Phalcon\Http\RequestInterface;
 use Phalcon\Mvc\User\Component;
-use Phalcon\Queue\Beanstalk;
-use Phalcon\Queue\Beanstalk\Job;
+use Pheanstalk\Contract\JobIdInterface;
+use Pheanstalk\Contract\PheanstalkInterface;
+use Pheanstalk\Job;
+use Pheanstalk\Pheanstalk;
 use VitesseCms\Core\AbstractController;
 use VitesseCms\Job\Enum\JobTypeEnum;
 use VitesseCms\Job\Factories\JobQueueFactory;
 use VitesseCms\User\Models\User;
 
-class BeanstalkService extends Beanstalk
+class BeanstalkService
 {
+    /**
+     * @var Pheanstalk
+     */
+    private $client;
+
+    public function __construct(Pheanstalk $client)
+    {
+        $this->client = $client;
+    }
+
     public function createByController(AbstractController $controller): int
     {
         $router = $controller->router;
@@ -33,6 +45,7 @@ class BeanstalkService extends Beanstalk
         if ($user) :
             $userId = $user->getId();
         endif;
+
         $data = [
             'jobType' => JobTypeEnum::CONTROLLER,
             'module' => $router->getModuleName(),
@@ -43,22 +56,22 @@ class BeanstalkService extends Beanstalk
             'post' => $request->getPost(),
             'eventInputs' => (new Component())->content->getEventInputs(),
         ];
-        $delay = $jobOptions['delay'] ?? null;
 
-        $jobId = $this->put($data, $jobOptions);
+        $delay = $jobOptions['delay'] ?? PheanstalkInterface::DEFAULT_DELAY;
+        $job = $this->handlePut($data, $delay);
 
         JobQueueFactory::create(
             $router->getModuleName() .
             '/' . $router->getControllerName() .
             '/' . $router->getActionName(),
             serialize($router->getParams()),
-            $jobId,
+            $job->getId(),
             '',
             false,
             $delay
         )->save();
 
-        return $jobId;
+        return $job->getId();
     }
 
     public function createListenerJob(
@@ -68,25 +81,48 @@ class BeanstalkService extends Beanstalk
         array  $jobOptions = []
     ): int
     {
-        $jobId = $this->put([
-            'jobType' => JobTypeEnum::LISTENER,
-            'eventTrigger' => $eventTrigger
-        ], $jobOptions);
+        $delay = $jobOptions['delay'] ?? PheanstalkInterface::DEFAULT_DELAY;
+
+        $job = $this->handlePut(
+            [
+                'jobType' => JobTypeEnum::LISTENER,
+                'eventTrigger' => $eventTrigger
+            ],
+            $delay
+        );
 
         JobQueueFactory::create(
             $name,
             serialize($eventVehicle),
-            $jobId,
+            $job->getId(),
             '',
             false,
-            $jobOptions['delay'] ?? null
+            $delay
         )->save();
 
-        return $jobId;
+        return $job->getId();
     }
 
     public function peekReady(): ?Job
     {
-        return parent::peekReady() ?: null;
+        return $this->client->peekReady();
+    }
+
+    public function delete(JobIdInterface $job)
+    {
+        $this->client->delete($job);
+    }
+
+    private function handlePut($data, int $delay = 0): Job
+    {
+        if (!is_string($data)) :
+            $data = serialize($data);
+        endif;
+
+        return $this->client->put(
+            $data,
+            PheanstalkInterface::DEFAULT_PRIORITY,
+            $delay
+        );
     }
 }
