@@ -22,7 +22,7 @@
     "vitessecms/admin": "~0.4.0",
     "vitessecms/core": "~0.4.8",
     "vitessecms/user": "~0.4.1",
-    "vitessecms/form": "~0.4.3",
+    "vitessecms/form": "~0.4.4",
     "pda/pheanstalk": "^4.0"
   }
 }
