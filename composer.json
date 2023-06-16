@@ -20,7 +20,7 @@
   "require": {
     "vitessecms/database": "^1.0.0",
     "vitessecms/admin": "^1.0.0",
-    "vitessecms/core": "^1.1.0",
+    "vitessecms/core": "^1.2.0",
     "vitessecms/user": "^1.0.0",
     "vitessecms/form": "^1.0.0",
     "pda/pheanstalk": "^4.0"
