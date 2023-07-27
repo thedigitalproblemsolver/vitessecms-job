@@ -40,7 +40,7 @@ class AdminjobqueueController extends AbstractControllerAdmin implements
         return $this->jobQueueRepository->findAll(
             $findValueIterator,
             false,
-            9999,
+            999,
             new FindOrderIterator([new FindOrder('createdAt', -1)])
         );
     }
