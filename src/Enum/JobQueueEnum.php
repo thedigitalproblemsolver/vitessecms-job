@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace VitesseCms\Job\Enum;
 
@@ -6,4 +8,5 @@ enum JobQueueEnum: string
 {
     case LISTENER = 'JobQueueListener';
     case GET_REPOSITORY = 'JobQueueListener:getRepository';
+    case ATTACH_SERVICE_LISTENER = 'JobQueueListener:attach';
 }
