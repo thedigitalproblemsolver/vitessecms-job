@@ -1,8 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace VitesseCms\Job\Models;
 
-class JobQueueIterator extends \ArrayIterator
+use ArrayIterator;
+
+class JobQueueIterator extends ArrayIterator
 {
     public function __construct(array $items)
     {

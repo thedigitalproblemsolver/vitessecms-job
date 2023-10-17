@@ -1,8 +1,8 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace VitesseCms\Job\Listeners;
 
-use Phalcon\Events\Manager;
 use VitesseCms\Core\Interfaces\InitiateListenersInterface;
 use VitesseCms\Core\Interfaces\InjectableInterface;
 use VitesseCms\Job\Controllers\AdminjobqueueController;
@@ -18,6 +18,9 @@ class InitiateAdminListeners implements InitiateListenersInterface
     {
         $di->eventsManager->attach('adminMenu', new AdminMenuListener());
         $di->eventsManager->attach(AdminjobqueueController::class, new AdminjobqueueControllerListener());
-        $di->eventsManager->attach(JobQueueEnum::LISTENER->value, new JobQueueListener(new JobQueueRepository()));
+        $di->eventsManager->attach(
+            JobQueueEnum::LISTENER->value,
+            new JobQueueListener(new JobQueueRepository(), $di->jobQueue)
+        );
     }
 }
