@@ -40,7 +40,7 @@ class AdminjobqueueController extends AbstractControllerAdmin implements
             $findValueIterator,
             false,
             999,
-            new FindOrderIterator([new FindOrder('createdAt', -1)])
+            new FindOrderIterator([new FindOrder('jobId', -1)])
         );
     }
 
