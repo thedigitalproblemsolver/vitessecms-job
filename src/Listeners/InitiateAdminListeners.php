@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace VitesseCms\Job\Listeners;
@@ -14,13 +15,13 @@ use VitesseCms\Job\Repositories\JobQueueRepository;
 
 class InitiateAdminListeners implements InitiateListenersInterface
 {
-    public static function setListeners(InjectableInterface $di): void
+    public static function setListeners(InjectableInterface $injectable): void
     {
-        $di->eventsManager->attach('adminMenu', new AdminMenuListener());
-        $di->eventsManager->attach(AdminjobqueueController::class, new AdminjobqueueControllerListener());
-        $di->eventsManager->attach(
+        $injectable->eventsManager->attach('adminMenu', new AdminMenuListener());
+        $injectable->eventsManager->attach(AdminjobqueueController::class, new AdminjobqueueControllerListener());
+        $injectable->eventsManager->attach(
             JobQueueEnum::LISTENER->value,
-            new JobQueueListener(new JobQueueRepository(), $di->jobQueue)
+            new JobQueueListener(new JobQueueRepository(), $injectable->jobQueue)
         );
     }
 }
